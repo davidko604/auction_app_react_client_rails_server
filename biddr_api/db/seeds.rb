@@ -40,7 +40,7 @@ users = User.all
     title: Faker::Hacker.say_something_smart,
     description: Faker::ChuckNorris.fact,
     reserve_price: rand(100_0),
-    aasm_state: Auction.aasm.states.map(&:name).sample,
+    aasm_state: :published,
     end_date: end_at,
     created_at: created_at,
     updated_at: created_at,

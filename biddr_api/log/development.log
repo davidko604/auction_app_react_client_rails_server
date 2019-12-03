@@ -16560,3 +16560,755 @@ Processing by Api::V1::AuctionsController#show as JSON
 Completed 200 OK in 85ms (Views: 20.2ms | ActiveRecord: 52.5ms | Allocations: 10869)
 
 
+  [1m[35m (6.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (3.3ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (200.9ms)[0m  [1m[35mDROP DATABASE IF EXISTS "biddr_api_development"[0m
+  [1m[35m (175.1ms)[0m  [1m[35mDROP DATABASE IF EXISTS "biddr_api_test"[0m
+  [1m[35m (675.9ms)[0m  [1m[35mCREATE DATABASE "biddr_api_development" ENCODING = 'unicode'[0m
+  [1m[35m (444.7ms)[0m  [1m[35mCREATE DATABASE "biddr_api_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (1.4ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.7ms)[0m  [1m[35mDROP TABLE IF EXISTS "auctions" CASCADE[0m
+  [1m[35m (11.7ms)[0m  [1m[35mCREATE TABLE "auctions" ("id" bigserial primary key, "title" character varying, "description" text, "starting_bid" float, "active_bid" float, "reserve_price" float, "end_date" timestamp, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint, "aasm_state" character varying)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE  INDEX  "index_auctions_on_user_id" ON "auctions"  ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "bids" CASCADE[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE TABLE "bids" ("id" bigserial primary key, "amount" float, "auction_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint)[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_auction_id" ON "bids"  ("auction_id")[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_user_id" ON "bids"  ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" CASCADE[0m
+  [1m[35m (5.5ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "email" character varying, "password_digest" character varying, "is_admin" boolean DEFAULT FALSE, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_users_on_email" ON "users"  ("email")[0m
+  [1m[35m (44.9ms)[0m  [1m[35mALTER TABLE "auctions" ADD CONSTRAINT "fk_rails_a21a834151"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (1.5ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_7332d1a025"
+FOREIGN KEY ("auction_id")
+  REFERENCES "auctions" ("id")
+[0m
+  [1m[35m (1.2ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_e173de2ed3"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20191202190710)[0m
+  [1m[35m (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20191202184419),
+(20191202184503),
+(20191202190625);
+
+[0m
+  [1m[35m (3.5ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (41.5ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2019-12-03 07:01:46.846992"], ["updated_at", "2019-12-03 07:01:46.846992"]]
+  [1m[35m (1.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "6dfb5c872199b3e79022e29beb073878ca669188"], ["created_at", "2019-12-03 07:01:46.902193"], ["updated_at", "2019-12-03 07:01:46.902193"]]
+  [1m[35m (40.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "auctions" CASCADE[0m
+  [1m[35m (7.8ms)[0m  [1m[35mCREATE TABLE "auctions" ("id" bigserial primary key, "title" character varying, "description" text, "starting_bid" float, "active_bid" float, "reserve_price" float, "end_date" timestamp, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint, "aasm_state" character varying)[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE  INDEX  "index_auctions_on_user_id" ON "auctions"  ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "bids" CASCADE[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE TABLE "bids" ("id" bigserial primary key, "amount" float, "auction_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint)[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_auction_id" ON "bids"  ("auction_id")[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_user_id" ON "bids"  ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" CASCADE[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "email" character varying, "password_digest" character varying, "is_admin" boolean DEFAULT FALSE, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_users_on_email" ON "users"  ("email")[0m
+  [1m[35m (2.0ms)[0m  [1m[35mALTER TABLE "auctions" ADD CONSTRAINT "fk_rails_a21a834151"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_7332d1a025"
+FOREIGN KEY ("auction_id")
+  REFERENCES "auctions" ("id")
+[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_e173de2ed3"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20191202190710)[0m
+  [1m[35m (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20191202184419),
+(20191202184503),
+(20191202190625);
+
+[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.8ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2019-12-03 07:01:47.075508"], ["updated_at", "2019-12-03 07:01:47.075508"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.3ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = $1, "updated_at" = $2 WHERE "ar_internal_metadata"."key" = $3[0m  [["value", "test"], ["updated_at", "2019-12-03 07:01:47.083311"], ["key", "environment"]]
+  [1m[35m (39.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "6dfb5c872199b3e79022e29beb073878ca669188"], ["created_at", "2019-12-03 07:01:47.131742"], ["updated_at", "2019-12-03 07:01:47.131742"]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mBid Destroy (0.5ms)[0m  [1m[31mDELETE FROM "bids"[0m
+  [1m[36mAuction Destroy (0.4ms)[0m  [1m[31mDELETE FROM "auctions"[0m
+  [1m[36mUser Destroy (0.4ms)[0m  [1m[31mDELETE FROM "users"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.7ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "is_admin", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["first_name", "Ham"], ["last_name", "Burger"], ["email", "davidko604@gmail.com"], ["password_digest", "$2a$12$2mgRRx7Rpf/PslGzBuATOOagaiGoWD47cvVWA4VpMnad/slGcBszS"], ["is_admin", true], ["created_at", "2019-12-03 07:01:47.502434"], ["updated_at", "2019-12-03 07:01:47.502434"]]
+  [1m[35m (8.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Sandy"], ["last_name", "Emmerich"], ["email", "sandy.emmerich@gmail.com"], ["password_digest", "$2a$12$sthVlZP3BeZwy4bTIT3DO.QXftRZUpPuhDhQLQoPBaATVWHp58.Ze"], ["created_at", "2019-12-03 07:01:48.005822"], ["updated_at", "2019-12-03 07:01:48.005822"]]
+  [1m[35m (1.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.6ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Elza"], ["last_name", "Grimes"], ["email", "elza.grimes@gmail.com"], ["password_digest", "$2a$12$jUJ/crh0CaM9PTyLBKICLuVUMDC.4iyJNFfLgInmHMxNbNryIK9Ii"], ["created_at", "2019-12-03 07:01:48.326295"], ["updated_at", "2019-12-03 07:01:48.326295"]]
+  [1m[35m (31.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Renaldo"], ["last_name", "Bechtelar"], ["email", "renaldo.bechtelar@gmail.com"], ["password_digest", "$2a$12$X5G0mH27Cfz39RNwli7yUeOXePkeuB5YZXpihWWDzk3yqCHvnKYRq"], ["created_at", "2019-12-03 07:01:48.684725"], ["updated_at", "2019-12-03 07:01:48.684725"]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Garth"], ["last_name", "Champlin"], ["email", "garth.champlin@gmail.com"], ["password_digest", "$2a$12$U4ZnEntncNrWZuQiCVWKfOlYR24XER5dQjYHyFUD.lM9zJcbrLazO"], ["created_at", "2019-12-03 07:01:48.986673"], ["updated_at", "2019-12-03 07:01:48.986673"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Dexter"], ["last_name", "Deckow"], ["email", "dexter.deckow@gmail.com"], ["password_digest", "$2a$12$Dimn3ruPlT7Q9.jGN0Js0.imG8Q1VnZv4X1a4j83i.bJ3FvZ5UypS"], ["created_at", "2019-12-03 07:01:49.289352"], ["updated_at", "2019-12-03 07:01:49.289352"]]
+  [1m[35m (7.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (191.8ms)[0m  [1m[35mDROP DATABASE IF EXISTS "biddr_api_development"[0m
+  [1m[35m (196.5ms)[0m  [1m[35mDROP DATABASE IF EXISTS "biddr_api_test"[0m
+  [1m[35m (600.2ms)[0m  [1m[35mCREATE DATABASE "biddr_api_development" ENCODING = 'unicode'[0m
+  [1m[35m (394.7ms)[0m  [1m[35mCREATE DATABASE "biddr_api_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "auctions" CASCADE[0m
+  [1m[35m (7.8ms)[0m  [1m[35mCREATE TABLE "auctions" ("id" bigserial primary key, "title" character varying, "description" text, "starting_bid" float, "active_bid" float, "reserve_price" float, "end_date" timestamp, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint, "aasm_state" character varying)[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE  INDEX  "index_auctions_on_user_id" ON "auctions"  ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "bids" CASCADE[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE TABLE "bids" ("id" bigserial primary key, "amount" float, "auction_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint)[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_auction_id" ON "bids"  ("auction_id")[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_user_id" ON "bids"  ("user_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" CASCADE[0m
+  [1m[35m (3.4ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "email" character varying, "password_digest" character varying, "is_admin" boolean DEFAULT FALSE, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_users_on_email" ON "users"  ("email")[0m
+  [1m[35m (3.3ms)[0m  [1m[35mALTER TABLE "auctions" ADD CONSTRAINT "fk_rails_a21a834151"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_7332d1a025"
+FOREIGN KEY ("auction_id")
+  REFERENCES "auctions" ("id")
+[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_e173de2ed3"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20191202190710)[0m
+  [1m[35m (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20191202184419),
+(20191202184503),
+(20191202190625);
+
+[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2019-12-03 07:02:36.275728"], ["updated_at", "2019-12-03 07:02:36.275728"]]
+  [1m[35m (39.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "6dfb5c872199b3e79022e29beb073878ca669188"], ["created_at", "2019-12-03 07:02:36.325042"], ["updated_at", "2019-12-03 07:02:36.325042"]]
+  [1m[35m (40.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "auctions" CASCADE[0m
+  [1m[35m (6.8ms)[0m  [1m[35mCREATE TABLE "auctions" ("id" bigserial primary key, "title" character varying, "description" text, "starting_bid" float, "active_bid" float, "reserve_price" float, "end_date" timestamp, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint, "aasm_state" character varying)[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE  INDEX  "index_auctions_on_user_id" ON "auctions"  ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "bids" CASCADE[0m
+  [1m[35m (2.5ms)[0m  [1m[35mCREATE TABLE "bids" ("id" bigserial primary key, "amount" float, "auction_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "user_id" bigint)[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_auction_id" ON "bids"  ("auction_id")[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE  INDEX  "index_bids_on_user_id" ON "bids"  ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" CASCADE[0m
+  [1m[35m (3.2ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "email" character varying, "password_digest" character varying, "is_admin" boolean DEFAULT FALSE, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE UNIQUE INDEX  "index_users_on_email" ON "users"  ("email")[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "auctions" ADD CONSTRAINT "fk_rails_a21a834151"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (1.4ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_7332d1a025"
+FOREIGN KEY ("auction_id")
+  REFERENCES "auctions" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "bids" ADD CONSTRAINT "fk_rails_e173de2ed3"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20191202190710)[0m
+  [1m[35m (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20191202184419),
+(20191202184503),
+(20191202190625);
+
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.5ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2019-12-03 07:02:36.522927"], ["updated_at", "2019-12-03 07:02:36.522927"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.3ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = $1, "updated_at" = $2 WHERE "ar_internal_metadata"."key" = $3[0m  [["value", "test"], ["updated_at", "2019-12-03 07:02:36.538850"], ["key", "environment"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "6dfb5c872199b3e79022e29beb073878ca669188"], ["created_at", "2019-12-03 07:02:36.551383"], ["updated_at", "2019-12-03 07:02:36.551383"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mBid Destroy (0.5ms)[0m  [1m[31mDELETE FROM "bids"[0m
+  [1m[36mAuction Destroy (0.4ms)[0m  [1m[31mDELETE FROM "auctions"[0m
+  [1m[36mUser Destroy (0.4ms)[0m  [1m[31mDELETE FROM "users"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.8ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "is_admin", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["first_name", "Ham"], ["last_name", "Burger"], ["email", "davidko604@gmail.com"], ["password_digest", "$2a$12$yPVbq7T3c2HOvCbdRWKGten5jddwEAZCs946qujSKYnI8lWaIJzeG"], ["is_admin", true], ["created_at", "2019-12-03 07:02:36.933347"], ["updated_at", "2019-12-03 07:02:36.933347"]]
+  [1m[35m (1.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Michel"], ["last_name", "Beier"], ["email", "michel.beier@gmail.com"], ["password_digest", "$2a$12$.bqSIHSM8H6hk8u8MHPgx.68AWZewK0npJXzJ4.VYX2uDuFQpSA52"], ["created_at", "2019-12-03 07:02:37.410039"], ["updated_at", "2019-12-03 07:02:37.410039"]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Diane"], ["last_name", "Bogan"], ["email", "diane.bogan@gmail.com"], ["password_digest", "$2a$12$MR1zuFT1ss8iHxZVXGbuhOnsLJaFXMrrUR25BIqVMfha9STovqeb6"], ["created_at", "2019-12-03 07:02:37.704946"], ["updated_at", "2019-12-03 07:02:37.704946"]]
+  [1m[35m (8.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Marvin"], ["last_name", "D'Amore"], ["email", "marvin.d'amore@gmail.com"], ["password_digest", "$2a$12$q0rQeSamGdRhb/zPUMyiR.vanQlq4fAN0x/0J0bs0gsn99QU7FR.."], ["created_at", "2019-12-03 07:02:38.013319"], ["updated_at", "2019-12-03 07:02:38.013319"]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Jamal"], ["last_name", "Kertzmann"], ["email", "jamal.kertzmann@gmail.com"], ["password_digest", "$2a$12$cOLsTpEoCX2aWT3ZwBvqPO//vQx4MhdeNff2mWWFhZXjsZAK/VT0i"], ["created_at", "2019-12-03 07:02:38.307392"], ["updated_at", "2019-12-03 07:02:38.307392"]]
+  [1m[35m (8.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("first_name", "last_name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Devin"], ["last_name", "O'Hara"], ["email", "devin.o'hara@gmail.com"], ["password_digest", "$2a$12$CCcqLyp81nPRALgvSoXm.O.Ax1pkQvJImQKzDJrHE2bgltKDBSgM2"], ["created_at", "2019-12-03 07:02:38.611979"], ["updated_at", "2019-12-03 07:02:38.611979"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mAuction Create (43.5ms)[0m  [1m[32mINSERT INTO "auctions" ("title", "description", "reserve_price", "end_date", "created_at", "updated_at", "user_id", "aasm_state") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["title", "You can't transmit the hard drive without generating the optical AGP driver!"], ["description", "When Chuck Norris points to null, null quakes in fear."], ["reserve_price", 541.0], ["end_date", "2019-12-15 00:00:00"], ["created_at", "2019-11-24 00:00:00"], ["updated_at", "2019-11-24 00:00:00"], ["user_id", 1], ["aasm_state", "published"]]
+  [1m[35m (0.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mBid Load (0.2ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mBid Create (1.0ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 237.0], ["auction_id", 1], ["created_at", "2019-12-03 07:02:38.706314"], ["updated_at", "2019-12-03 07:02:38.706314"], ["user_id", 3]]
+  [1m[36mBid Create (0.4ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 95.0], ["auction_id", 1], ["created_at", "2019-12-03 07:02:38.710534"], ["updated_at", "2019-12-03 07:02:38.710534"], ["user_id", 1]]
+  [1m[36mBid Create (0.4ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 199.0], ["auction_id", 1], ["created_at", "2019-12-03 07:02:38.712687"], ["updated_at", "2019-12-03 07:02:38.712687"], ["user_id", 2]]
+  [1m[36mBid Create (0.4ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 42.0], ["auction_id", 1], ["created_at", "2019-12-03 07:02:38.714699"], ["updated_at", "2019-12-03 07:02:38.714699"], ["user_id", 3]]
+  [1m[36mBid Create (0.5ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 137.0], ["auction_id", 1], ["created_at", "2019-12-03 07:02:38.716669"], ["updated_at", "2019-12-03 07:02:38.716669"], ["user_id", 3]]
+  [1m[35m (40.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mAuction Create (0.4ms)[0m  [1m[32mINSERT INTO "auctions" ("title", "description", "reserve_price", "end_date", "created_at", "updated_at", "user_id", "aasm_state") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["title", "Navigating the interface won't do anything, we need to back up the mobile png bus!"], ["description", "Chuck Norris doesn't use web standards as the web will conform to him."], ["reserve_price", 536.0], ["end_date", "2019-12-13 00:00:00"], ["created_at", "2019-11-23 00:00:00"], ["updated_at", "2019-11-23 00:00:00"], ["user_id", 2], ["aasm_state", "published"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 2]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mBid Create (0.4ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 285.0], ["auction_id", 2], ["created_at", "2019-12-03 07:02:38.771717"], ["updated_at", "2019-12-03 07:02:38.771717"], ["user_id", 6]]
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 237.0], ["auction_id", 2], ["created_at", "2019-12-03 07:02:38.775121"], ["updated_at", "2019-12-03 07:02:38.775121"], ["user_id", 1]]
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 58.0], ["auction_id", 2], ["created_at", "2019-12-03 07:02:38.776968"], ["updated_at", "2019-12-03 07:02:38.776968"], ["user_id", 4]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mAuction Create (0.6ms)[0m  [1m[32mINSERT INTO "auctions" ("title", "description", "reserve_price", "end_date", "created_at", "updated_at", "user_id", "aasm_state") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["title", "We need to calculate the open-source EXE microchip!"], ["description", "Anonymous methods and anonymous types are really all called Chuck Norris. They just don't like to boast."], ["reserve_price", 203.0], ["end_date", "2019-12-31 00:00:00"], ["created_at", "2019-11-24 00:00:00"], ["updated_at", "2019-11-24 00:00:00"], ["user_id", 6], ["aasm_state", "published"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 3]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mBid Create (0.4ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 256.0], ["auction_id", 3], ["created_at", "2019-12-03 07:02:38.790447"], ["updated_at", "2019-12-03 07:02:38.790447"], ["user_id", 3]]
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 125.0], ["auction_id", 3], ["created_at", "2019-12-03 07:02:38.794024"], ["updated_at", "2019-12-03 07:02:38.794024"], ["user_id", 2]]
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 15.0], ["auction_id", 3], ["created_at", "2019-12-03 07:02:38.795994"], ["updated_at", "2019-12-03 07:02:38.795994"], ["user_id", 3]]
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 14.0], ["auction_id", 3], ["created_at", "2019-12-03 07:02:38.797792"], ["updated_at", "2019-12-03 07:02:38.797792"], ["user_id", 4]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mAuction Create (0.4ms)[0m  [1m[32mINSERT INTO "auctions" ("title", "description", "reserve_price", "end_date", "created_at", "updated_at", "user_id", "aasm_state") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["title", "Hacking the monitor won't do anything, we need to back up the haptic ssl system!"], ["description", "Chuck Norris can access private methods."], ["reserve_price", 596.0], ["end_date", "2019-12-11 00:00:00"], ["created_at", "2019-11-23 00:00:00"], ["updated_at", "2019-11-23 00:00:00"], ["user_id", 3], ["aasm_state", "published"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 4]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 6.0], ["auction_id", 4], ["created_at", "2019-12-03 07:02:38.809608"], ["updated_at", "2019-12-03 07:02:38.809608"], ["user_id", 1]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mAuction Create (0.6ms)[0m  [1m[32mINSERT INTO "auctions" ("title", "description", "reserve_price", "end_date", "created_at", "updated_at", "user_id", "aasm_state") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["title", "We need to input the mobile HTTP sensor!"], ["description", "Chuck Norris doesn't program with a keyboard. He stares the computer down until it does what he wants."], ["reserve_price", 914.0], ["end_date", "2019-12-14 00:00:00"], ["created_at", "2019-11-28 00:00:00"], ["updated_at", "2019-11-28 00:00:00"], ["user_id", 2], ["aasm_state", "published"]]
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mBid Load (0.2ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 90.0], ["auction_id", 5], ["created_at", "2019-12-03 07:02:38.822880"], ["updated_at", "2019-12-03 07:02:38.822880"], ["user_id", 6]]
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 241.0], ["auction_id", 5], ["created_at", "2019-12-03 07:02:38.825919"], ["updated_at", "2019-12-03 07:02:38.825919"], ["user_id", 4]]
+  [1m[36mBid Create (0.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 105.0], ["auction_id", 5], ["created_at", "2019-12-03 07:02:38.827713"], ["updated_at", "2019-12-03 07:02:38.827713"], ["user_id", 3]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "auctions"[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "bids"[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+Started GET "/api/v1/users/current" for ::1 at 2019-12-02 23:03:10 -0800
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::V1::UsersController#current as JSON
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (0.57ms)
+Filter chain halted as :authenticate_user! rendered or redirected
+Completed 401 Unauthorized in 24ms (Views: 4.3ms | ActiveRecord: 2.8ms | Allocations: 8217)
+
+
+Started GET "/api/v1/auctions" for ::1 at 2019-12-02 23:03:13 -0800
+Processing by Api::V1::AuctionsController#index as JSON
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mAuction Load (28.0ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."aasm_state" IN ($1, $2) ORDER BY "auctions"."created_at" DESC[0m  [["aasm_state", "published"], ["aasm_state", "reserve_met"]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.6ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 14, amount: 90.0, auction_id: 5, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.4ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 1, amount: 237.0, auction_id: 1, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 3]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 9, amount: 256.0, auction_id: 3, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers]   [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.7ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 2]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 6, amount: 285.0, auction_id: 2, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers]   [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.4ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 4]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 13, amount: 6.0, auction_id: 4, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 1>
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 14, amount: 90.0, auction_id: 5, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers] No serializer found for resource: #<Bid id: 1, amount: 237.0, auction_id: 1, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers] No serializer found for resource: #<Bid id: 9, amount: 256.0, auction_id: 3, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers] No serializer found for resource: #<Bid id: 6, amount: 285.0, auction_id: 2, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers] No serializer found for resource: #<Bid id: 13, amount: 6.0, auction_id: 4, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 1>
+[active_model_serializers] Rendered ActiveModel::Serializer::CollectionSerializer with ActiveModelSerializers::Adapter::Attributes (161.68ms)
+Completed 200 OK in 329ms (Views: 201.4ms | ActiveRecord: 47.1ms | Allocations: 56481)
+
+
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:03:14 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+  [1m[36mAuction Load (2.0ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (0.4ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (49.92ms)
+Completed 200 OK in 65ms (Views: 55.3ms | ActiveRecord: 3.6ms | Allocations: 14810)
+
+
+Started GET "/api/v1/users/current" for ::1 at 2019-12-02 23:04:43 -0800
+Processing by Api::V1::UsersController#current as JSON
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (0.19ms)
+Filter chain halted as :authenticate_user! rendered or redirected
+Completed 401 Unauthorized in 29ms (Views: 6.3ms | ActiveRecord: 6.6ms | Allocations: 7022)
+
+
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:04:44 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+  [1m[36mAuction Load (0.5ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (0.7ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (72.88ms)
+Completed 200 OK in 130ms (Views: 63.3ms | ActiveRecord: 26.6ms | Allocations: 34053)
+
+
+Started GET "/api/v1/users/current" for ::1 at 2019-12-02 23:05:18 -0800
+Processing by Api::V1::UsersController#current as JSON
+  [1m[36mUser Load (3.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (0.15ms)
+Filter chain halted as :authenticate_user! rendered or redirected
+Completed 401 Unauthorized in 10ms (Views: 2.7ms | ActiveRecord: 3.2ms | Allocations: 1506)
+
+
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:05:18 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+  [1m[36mAuction Load (23.6ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (3.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (240.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (724.87ms)
+Completed 200 OK in 753ms (Views: 482.2ms | ActiveRecord: 268.4ms | Allocations: 9547)
+
+
+Started GET "/api/v1/auctions" for ::1 at 2019-12-02 23:05:26 -0800
+Processing by Api::V1::AuctionsController#index as JSON
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mAuction Load (0.5ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."aasm_state" IN ($1, $2) ORDER BY "auctions"."created_at" DESC[0m  [["aasm_state", "published"], ["aasm_state", "reserve_met"]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.2ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 14, amount: 90.0, auction_id: 5, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers]   [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 1, amount: 237.0, auction_id: 1, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.2ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 3]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 9, amount: 256.0, auction_id: 3, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.2ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 2]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 6, amount: 285.0, auction_id: 2, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers]   [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.2ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 4]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 13, amount: 6.0, auction_id: 4, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 1>
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 14, amount: 90.0, auction_id: 5, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers] No serializer found for resource: #<Bid id: 1, amount: 237.0, auction_id: 1, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers] No serializer found for resource: #<Bid id: 9, amount: 256.0, auction_id: 3, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers] No serializer found for resource: #<Bid id: 6, amount: 285.0, auction_id: 2, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers] No serializer found for resource: #<Bid id: 13, amount: 6.0, auction_id: 4, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 1>
+[active_model_serializers] Rendered ActiveModel::Serializer::CollectionSerializer with ActiveModelSerializers::Adapter::Attributes (44.52ms)
+Completed 200 OK in 76ms (Views: 45.1ms | ActiveRecord: 3.6ms | Allocations: 33785)
+
+
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:05:27 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+  [1m[36mAuction Load (1.2ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (0.4ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (15.26ms)
+Completed 200 OK in 24ms (Views: 17.6ms | ActiveRecord: 3.5ms | Allocations: 9541)
+
+
+Started POST "/api/v1/session" for ::1 at 2019-12-02 23:05:32 -0800
+Processing by Api::V1::SessionsController#create as JSON
+  Parameters: {"email"=>"davidko604@gmail.com", "password"=>"[FILTERED]", "session"=>{"email"=>"davidko604@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "davidko604@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/sessions_controller.rb:4:in `create'
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (0.08ms)
+Completed 200 OK in 299ms (Views: 2.6ms | ActiveRecord: 0.6ms | Allocations: 1796)
+
+
+Started GET "/api/v1/users/current" for ::1 at 2019-12-02 23:05:33 -0800
+Processing by Api::V1::UsersController#current as JSON
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (0.68ms)
+Completed 200 OK in 8ms (Views: 3.6ms | ActiveRecord: 0.4ms | Allocations: 2575)
+
+
+Started GET "/api/v1/auctions" for ::1 at 2019-12-02 23:05:34 -0800
+Processing by Api::V1::AuctionsController#index as JSON
+  [1m[36mUser Load (1.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mAuction Load (0.6ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."aasm_state" IN ($1, $2) ORDER BY "auctions"."created_at" DESC[0m  [["aasm_state", "published"], ["aasm_state", "reserve_met"]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 14, amount: 90.0, auction_id: 5, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers]   [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 1, amount: 237.0, auction_id: 1, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers]   [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.4ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 3]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 9, amount: 256.0, auction_id: 3, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.7ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 2]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 6, amount: 285.0, auction_id: 2, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers]   [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers]   [1m[36mBid Load (0.2ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 4]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 13, amount: 6.0, auction_id: 4, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 1>
+[active_model_serializers]   [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:12:in `index'
+[active_model_serializers] No serializer found for resource: #<Bid id: 14, amount: 90.0, auction_id: 5, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers] No serializer found for resource: #<Bid id: 1, amount: 237.0, auction_id: 1, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers] No serializer found for resource: #<Bid id: 9, amount: 256.0, auction_id: 3, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 3>
+[active_model_serializers] No serializer found for resource: #<Bid id: 6, amount: 285.0, auction_id: 2, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 6>
+[active_model_serializers] No serializer found for resource: #<Bid id: 13, amount: 6.0, auction_id: 4, created_at: "2019-12-03 07:02:38", updated_at: "2019-12-03 07:02:38", user_id: 1>
+[active_model_serializers] Rendered ActiveModel::Serializer::CollectionSerializer with ActiveModelSerializers::Adapter::Attributes (41.9ms)
+Completed 200 OK in 55ms (Views: 47.3ms | ActiveRecord: 5.4ms | Allocations: 19724)
+
+
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:05:35 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+  [1m[36mAuction Load (1.0ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (0.4ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (20.97ms)
+Completed 200 OK in 31ms (Views: 23.2ms | ActiveRecord: 4.2ms | Allocations: 9557)
+
+
+Started POST "/api/v1/auctions/5/bids" for ::1 at 2019-12-02 23:05:39 -0800
+Processing by Api::V1::BidsController#create as JSON
+  Parameters: {"amount"=>"", "auction_id"=>"5", "bid"=>{"amount"=>""}}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mAuction Load (0.5ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/bids_controller.rb:25:in `create'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (0.2ms)
+Completed 200 OK in 361ms (Views: 2.9ms | ActiveRecord: 2.2ms | Allocations: 182836)
+
+
+Started GET "/api/v1/users/current" for ::1 at 2019-12-02 23:05:40 -0800
+Processing by Api::V1::UsersController#current as JSON
+  [1m[36mUser Load (11.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (0.55ms)
+Completed 200 OK in 390ms (Views: 373.8ms | ActiveRecord: 11.2ms | Allocations: 2112)
+
+
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:05:40 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+  [1m[36mAuction Load (8.1ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (89.76ms)
+Completed 200 OK in 106ms (Views: 91.9ms | ActiveRecord: 11.2ms | Allocations: 9558)
+
+
+Started POST "/api/v1/auctions/5/bids" for ::1 at 2019-12-02 23:05:44 -0800
+Processing by Api::V1::BidsController#create as JSON
+  Parameters: {"amount"=>"4", "auction_id"=>"5", "bid"=>{"amount"=>"4"}}
+  [1m[36mUser Load (11.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mAuction Load (0.4ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/bids_controller.rb:25:in `create'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[35m (2.0ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/bids_controller.rb:29:in `create'
+  [1m[36mBid Create (6.3ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 4.0], ["auction_id", 5], ["created_at", "2019-12-03 07:05:44.544236"], ["updated_at", "2019-12-03 07:05:44.544236"], ["user_id", 1]]
+  ↳ app/controllers/api/v1/bids_controller.rb:29:in `create'
+  [1m[35m (134.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/bids_controller.rb:29:in `create'
+  [1m[36mUser Load (9.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (0.08ms)
+Completed 200 OK in 177ms (Views: 1.8ms | ActiveRecord: 164.0ms | Allocations: 4932)
+
+
+Started GET "/api/v1/users/current" for ::1 at 2019-12-02 23:05:44 -0800
+Processing by Api::V1::UsersController#current as JSON
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (0.71ms)
+Completed 200 OK in 7ms (Views: 3.5ms | ActiveRecord: 0.5ms | Allocations: 2111)
+
+
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:05:44 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+  [1m[36mAuction Load (73.2ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (49.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (3.5ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (47.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (84.12ms)
+Completed 200 OK in 212ms (Views: 35.2ms | ActiveRecord: 174.1ms | Allocations: 11155)
+
+
+Started POST "/api/v1/auctions/5/bids" for ::1 at 2019-12-02 23:05:50 -0800
+Processing by Api::V1::BidsController#create as JSON
+  Parameters: {"amount"=>"4124", "auction_id"=>"5", "bid"=>{"amount"=>"4124"}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mAuction Load (0.3ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/bids_controller.rb:25:in `create'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+Started POST "/api/v1/auctions/5/reservings" for ::1 at 2019-12-02 23:05:50 -0800
+  [1m[35m (3.0ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/bids_controller.rb:29:in `create'
+  [1m[36mBid Create (5.1ms)[0m  [1m[32mINSERT INTO "bids" ("amount", "auction_id", "created_at", "updated_at", "user_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["amount", 4124.0], ["auction_id", 5], ["created_at", "2019-12-03 07:05:50.613471"], ["updated_at", "2019-12-03 07:05:50.613471"], ["user_id", 1]]
+  ↳ app/controllers/api/v1/bids_controller.rb:29:in `create'
+  [1m[35m (129.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/bids_controller.rb:29:in `create'
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered ActiveModel::Serializer::Null with Hash (0.11ms)
+Completed 200 OK in 153ms (Views: 2.1ms | ActiveRecord: 138.6ms | Allocations: 6097)
+
+
+Started GET "/api/v1/users/current" for ::1 at 2019-12-02 23:05:50 -0800
+Processing by Api::V1::UsersController#current as JSON
+Processing by Api::V1::ReservingsController#create as JSON
+  [1m[36mUser Load (10.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Parameters: {"auction_id"=>"5", "reserving"=>{}}
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+  [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (0.47ms)
+Completed 200 OK in 18ms (Views: 2.0ms | ActiveRecord: 10.5ms | Allocations: 6210)
+
+
+  [1m[36mAuction Load (29.5ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/reservings_controller.rb:4:in `create'
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/api/v1/reservings_controller.rb:5:in `create'
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/reservings_controller.rb:5:in `create'
+  [1m[36mAuction Update (1.0ms)[0m  [1m[33mUPDATE "auctions" SET "updated_at" = $1, "aasm_state" = $2 WHERE "auctions"."id" = $3[0m  [["updated_at", "2019-12-03 07:05:50.899402"], ["aasm_state", "reserve_met"], ["id", 5]]
+  ↳ app/controllers/api/v1/reservings_controller.rb:5:in `create'
+  [1m[35m (0.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/api/v1/reservings_controller.rb:5:in `create'
+Started GET "/api/v1/auctions/5" for ::1 at 2019-12-02 23:05:51 -0800
+Processing by Api::V1::AuctionsController#show as JSON
+  Parameters: {"id"=>"5"}
+Completed 500 Internal Server Error in 550ms (ActiveRecord: 45.4ms | Allocations: 108398)
+
+
+  
+NameError (undefined local variable or method `auction' for #<Api::V1::ReservingsController:0x00007fa120d0b010>):
+  
+app/controllers/api/v1/reservings_controller.rb:6:in `create'
+  [1m[36mAuction Load (148.5ms)[0m  [1m[34mSELECT "auctions".* FROM "auctions" WHERE "auctions"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/api/v1/auctions_controller.rb:58:in `find_auction'
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:5:in `current_user'
+[active_model_serializers]   [1m[36mBid Load (0.3ms)[0m  [1m[34mSELECT "bids".* FROM "bids" WHERE "bids"."auction_id" = $1[0m  [["auction_id", 5]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mCACHE User Load (0.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers]   [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+[active_model_serializers]   ↳ app/controllers/api/v1/auctions_controller.rb:18:in `show'
+[active_model_serializers] Rendered AuctionSerializer with ActiveModelSerializers::Adapter::Attributes (33.87ms)
+Completed 200 OK in 386ms (Views: 34.8ms | ActiveRecord: 150.3ms | Allocations: 187214)
+
+
